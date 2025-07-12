@@ -16,7 +16,6 @@ type LatLng = {
   lng: number;
 };
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-// const google_maps_api_key = import.meta.vite.env.VITE_GOOGLE_MAPS_API_KEY
 function App() {
 const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
