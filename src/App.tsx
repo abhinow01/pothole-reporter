@@ -15,6 +15,7 @@ type LatLng = {
   lat: number;
   lng: number;
 };
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 // const google_maps_api_key = import.meta.vite.env.VITE_GOOGLE_MAPS_API_KEY
 function App() {
 const { isLoaded } = useJsApiLoader({
@@ -53,7 +54,7 @@ const handleMapClick = async (e : google.maps.MapMouseEvent) => {
   const lng = e.latLng.lng();
   setMarker({lat , lng}); 
   const res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDsKf_c4KEVpkHd2zP17PubYObK6ONE6Ro`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
     );
   const data = await res.json() 
   const addr = data.results?.[0]?.formatted_address || 'Unknown location';
