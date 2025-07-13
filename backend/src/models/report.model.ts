@@ -1,24 +1,23 @@
-import { Schema , Document } from "mongoose";
-import mongoose  from "mongoose";
+// @ts-check
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-export interface Report extends Document {
-    location : {
-        lat: number ;
-        lng: number;
-    } ;
-    description : string;
-    imageUrl? : string;
-    createdAt : Date;
-} 
+/**
+ * @typedef {Object} Report
+ * @property {{ lat: number, lng: number }} location
+ * @property {string} description
+ * @property {string} [imageUrl]
+ * @property {Date} createdAt
+ */
 
-const ReportSchema = new Schema<Report>({
-    location : {
+const ReportSchema = new Schema({
+  location: {
     lat: { type: Number, required: true },
     lng: { type: Number, required: true }
-    }, 
-    description : {type : String , required: true },
-    imageUrl : {type: String },
-    createdAt : {type : Date  , default : Date.now }
-})
+  },
+  description: { type: String, required: true },
+  imageUrl: { type: String },
+  createdAt: { type: Date, default: Date.now }
+});
 
-export default mongoose.model<Report>('Report' , ReportSchema)
+module.exports = mongoose.model('Report', ReportSchema);

@@ -1,20 +1,36 @@
-import { Request , Response } from "express";
-import { createReport , getAllReports } from "../services/report.service";
+const { createReport, getAllReports } = require('../services/report.service');
 
-export const postReport = async (req: Request , res : Response) =>{
-    try{
-        const report = await createReport(req.body);
-        res.status(201).json(report);
-    }catch(error){
-        res.status(500).json({ error: 'Failed to create report' });
-    }
-}
+/**
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ */
+// @ts-ignore
+const postReport = async (req : any, res : any) => {
+  try {
+    console.log("==body==" , req.body)
+    const report = await createReport(req.body);
+    res.status(201).json(report);
+  } catch (error) {
+    console.log("errpr" , error)
+    res.status(500).json({ error: 'Failed to create report' });
+  }
+};
 
-export const fetchReports = async (req : Request , res: Response) => {
-    try{
-        const reportData = await getAllReports();
-        res.status(200).json(reportData).json({message : "report data"})
-    }catch(error){
-        res.status(404).json({error: "Reports not found! "})
-    }
-}
+/**
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ */
+//@ts-ignore
+const fetchReports = async (req : any, res : any) => {
+  try {
+    const reportData = await getAllReports();
+    res.status(200).json(reportData);
+  } catch (error) {
+    res.status(404).json({ error: 'Reports not found!' });
+  }
+};
+
+module.exports = {
+  postReport,
+  fetchReports,
+};

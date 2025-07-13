@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-
+//@ts-ignore
+const mongoose = require('mongoose');
+//@ts-ignore
 const connectToMongoose = async () => {
     const uri : any = process.env.MONGODB_URI;
     try{
@@ -11,4 +12,4 @@ const connectToMongoose = async () => {
     }
 }
 
-export default connectToMongoose
+module.exports = connectToMongoose
