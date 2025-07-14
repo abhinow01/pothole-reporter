@@ -1,4 +1,4 @@
-import { useState ,  useCallback } from 'react';
+import { useState ,  useCallback ,useEffect} from 'react';
 import { GoogleMap, LoadScript, Marker , useJsApiLoader } from '@react-google-maps/api';
 import { MapPin, Camera, Send, CheckCircle, AlertCircle, Upload } from 'lucide-react';
 import './App.css'
@@ -7,10 +7,10 @@ const containerStyle = {
   height : '400px'
 }
 
-const center = {
-  lat : 28.6139,
-  lng : 77.2090
-}
+// const center = {
+//   lat : 28.6139,
+//   lng : 77.2090
+// }
 type LatLng = {
   lat: number;
   lng: number;
@@ -19,14 +19,31 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 function App() {
 const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Replace this
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, 
   });
 const [map, setMap] = useState<google.maps.Map | null>(null);
+const [mapCenter, setMapCenter] = useState<LatLng | null>(null);
+
 const [marker , setMarker] = useState<LatLng | null>(null);
 const [photo , setPhoto] = useState<File | null>(null);
 const [address , setAddress] = useState<string>('');
 const [isSubmitting, setIsSubmitting] = useState(false);
 const [photoPreview , setPhotoPreview] = useState<string | null>(null)
+
+useEffect(()=>{
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition((pos)=>{
+    const { latitude, longitude } = pos.coords;
+        const userLocation = { lat: latitude, lng: longitude };
+        setMarker(userLocation);
+        setMapCenter(userLocation); 
+  } , (err)=>{
+    console.error("Geolocation error:", err);
+  })
+}else{
+  console.error("Geolocation not supported");
+}
+},[])
 const onLoad = useCallback((map : google.maps.Map)=> {
   console.log("map data" , map)
     setMap(map);
@@ -126,7 +143,7 @@ const resetForm = ()=>{
       {isLoaded ?  (
         <GoogleMap
           mapContainerStyle={containerStyle}
-          center={center}
+          center={mapCenter}
           zoom={14}
           onLoad={onLoad}
           onUnmount={onUnmount}
